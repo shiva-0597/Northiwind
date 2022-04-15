@@ -4,7 +4,7 @@ db=SQLAlchemy()
 
 class OrderModel(db.Model):
     __tablename__ = 'orders'
-    orderId = db.Column(db.String(30), primary_key=True)
+    OrderID = db.Column(db.Integer, primary_key=True)
     customerId = db.Column(db.String(5), nullable=False)
     employeeId = db.Column(db.Integer, nullable=False)
     orderDate = db.Column(db.DateTime, nullable=True)
@@ -18,12 +18,12 @@ class OrderModel(db.Model):
     shipRegion = db.Column(db.String(15), nullable=False)
     shipPostalCode = db.Column(db.String(10), nullable=False)
     shipCountry = db.Column(db.String(15), nullable=False)
-    def __init__(self,orderId,customerId,employeeId,orderDate,requiredDate,shippedDate,shipVia,freight,shipName,shipAddress,shipCity,shipRegion,shipPostalCode,shipCountry):
-        self.orderId=orderId
+    def __init__(self,OrderID,customerId,employeeId,orderDate,RequiredDate,shippedDate,shipVia,freight,shipName,shipAddress,shipCity,shipRegion,shipPostalCode,shipCountry):
+        self.OrderID=OrderID
         self.customerId=customerId
         self.employeeId=employeeId
         self.orderDate=orderDate
-        self.requiredDate=requiredDate
+        self.RequiredDate=RequiredDate
         self.shippedDate=shippedDate
         self.shipVia=shipVia
         self.freight=freight
@@ -36,12 +36,12 @@ class OrderModel(db.Model):
 
     def output(self) -> dict:
         return {
-            "orderId": self.orderId,
+            "orderId": self.OrderID,
             "customerId": self.customerId,
             "employeeId": self.employeeId,
-            "orderDate": self.orderDate,
-            "requiredDate": self.requiredDate,
-            "shippedDate": self.shippedDate,
+            "orderDate": str(self.orderDate),
+            "requiredDate": str(self.requiredDate),
+            "shippedDate": str(self.shippedDate),
             "shipVia": self.shipVia,
             "freight": self.freight,
             "shipName": self.shipName,

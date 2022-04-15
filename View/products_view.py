@@ -3,45 +3,44 @@ from flask import request
 from flask_restful import Resource
 
 class ProductsView(Resource):
-    def get_all_products(self):
-        products =ProductModel.query.all()
-        print(products)
-        return {"customers":[x.output() for x in products]}
+    def get(self):
+        product =ProductModel.query.all()
+        return {"Products":[x.output() for x in product]}
 
 
 class productView(Resource):
-    def get_products(self,productId:str) -> dict:
-        products=ProductModel.query.filter(productId=productId).first()
+    def get(self,ProductID:int) -> dict:
+        products=ProductModel.query.filter_by(ProductID=ProductID).first()
         if products:
-            return ProductModel.output()
+            return products.output()
         return {"Output_message":"Customer not found"},404
 
-    def put_product(self,productId:str) -> dict:
+    def put(self,ProductID:int) -> dict:
         req=request.get_json()
-        products=ProductModel.query.filterby(productId=productId).first()
+        products=ProductModel.query.filterby(productId=ProductID).first()
         if products:
-            ProductModel.productName=req["productName"]
-            ProductModel.supplierId=req["supplierId"]
-            ProductModel.categoryId=req["categoryId"]
-            ProductModel.discontinued=req["discontinued"]
-            ProductModel.quantityPerUnit=req["quantityPerUnit"]
-            ProductModel.unitPrice=req["unitPrice"]
-            ProductModel.unitsInStock=req["unitsInStock"]
-            ProductModel.reorderLevel=req["reorderLevel"]
-            ProductModel.unitsOnOrder=req["unitsOnOrder"]
+            ProductModel.ProductName=req["ProductName"]
+            ProductModel.SupplierID=req["SupplierID"]
+            ProductModel.CategoryID=req["CategoryID"]
+            ProductModel.Discontinued=req["Discontinued"]
+            ProductModel.QuantityPerUnit=req["QuantityPerUnit"]
+            ProductModel.UnitPrice=req["UnitPrice"]
+            ProductModel.UnitsInStock=req["UnitsInStock"]
+            ProductModel.ReorderLevel=req["ReorderLevel"]
+            ProductModel.UnitsOnOrder=req["UnitsOnOrder"]
         else:
-            product=ProductModel(ProductId=productId,supplierId=req["supplierId"],categoryId=req["categoryId"],
-                        quantityPerUnit=req["quantityPerUnit"],unitsInStock=req["unitsInStock"],
-                        reorderLevel=req["reorderLevel"],unitPrice=req["unitPrice"],discontinued=req["discontinued"],
-                        productName=req["productName"],unitsOnOrder=req["unitsOnOrder"])
+            product=ProductModel(ProductId=ProductID,SupplierID=req["SupplierID"],CategoryID=req["CategoryID"],
+                        QuantityPerUnit=req["QuantityPerUnit"],UnitsInStock=req["UnitsInStock"],
+                        ReorderLevel=req["ReorderLevel"],UnitPrice=req["UnitPrice"],Discontinued=req["Discontinued"],
+                        ProductName=req["ProductName"],UnitsOnOrder=req["UnitsOnOrder"])
         
         db.session.add(product)
         db.session.commit()
         return {"Output_message":"Input Inserted"}
-    def delete_products(self,productId:str):
-        product=ProductModel.query.filterby(productId=productId).first()
+    def delete(self,ProductID:int):
+        product=ProductModel.query.filter_by(ProductID=ProductID).first()
         if product:
             db.session.delete(product)
-            db.commit()
+            db.session.commit()
             return {"output_message":"deleted"}
         return {"Output_message":"product not found"},404
